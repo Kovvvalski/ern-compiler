@@ -1,0 +1,15 @@
+implicit variable declaration
+explicit type casting
+one-target assign operator (a=b, NOT a,b = c,d)
+subprograms can bound the variable scope (e.g. functions)
+explicit block operator ({some code})
+2 option operator if-the-else (without switch case)
+without overloading of subprograms
+params passed in subprogram only by value and returned value
+subprograms can be defined at the beginning of the program only
+
+language of working with vectors and matrices
+integrated types: vector, matrix
+operations: v + v, v - v, n * v, v * v, |v|, m + m, m - m, m * n, m * m, m[n], m[n] * n, |m|, v * m
+
+target code: cpython byte code
