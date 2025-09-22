@@ -1,6 +1,7 @@
 # ERN Compiler
 
 ERN Compiler is a command-line tool for compiling ERN, a small custom imperative programming language designed primarily for vector and matrix operations. The project is built with Java and uses ANTLR v4 for parsing, Spring Context for dependency management, and Picocli for the command-line interface.
+Currently ONLY syntax analysis functionality is implemented, project is still in development.
 
 ## Project structure
 
