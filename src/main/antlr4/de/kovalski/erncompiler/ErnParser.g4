@@ -1,4 +1,3 @@
-// Parser grammar for the ERN language
 parser grammar ErnParser;
 
 // === OPTIONS ===
@@ -9,86 +8,67 @@ program: functionDef* statement* EOF;
 
 // === STATEMENTS ===
 statement
-    : assignment
-    | ifStatement
+    : ifStatement
     | whileStatement
-    // A function call can be a standalone statement if followed by a semicolon
-    | functionCall SEMI
-    | returnStatement
-    // A block can also be a statement (e.g., inside an if without its own block)
+    | doWhileStatement
+    | forStatement
     | block
+    | functionCall SEMI
+    | expression SEMI
     ;
 
-assignment: ID ASSIGN expression SEMI;
-
-ifStatement: IF LPAREN expression RPAREN statement (ELSE statement)?;
-
-whileStatement: WHILE LPAREN expression RPAREN statement;
-
-returnStatement: RETURN expression SEMI;
+ifStatement:      IF LPAREN expression RPAREN statement (ELSE statement)?;
+whileStatement:   WHILE LPAREN expression RPAREN block;
+doWhileStatement: DO block WHILE LPAREN expression RPAREN SEMI;
+forStatement:     FOR LPAREN expressionList? SEMI expressionList? SEMI expressionList? RPAREN block;
+expressionList:   expression (COMMA expression)*;
 
 // === FUNCTIONS ===
+
 functionDef: FUNCTION ID LPAREN paramList? RPAREN block;
 
 block: LBRACE statement* RBRACE;
 
-paramList: ID (COMMA ID)*;
+paramList: param (COMMA param)*;
 
-// === EXPRESSIONS (REBUILT WITH PRECEDENCE) ===
+param: (RETURNS | EXPECTS) ID;
 
-// The main entry point for an expression, starting with the lowest precedence.
+functionCall: ID LPAREN argList? RPAREN;
+
+argList: expression (COMMA expression)*;
+
+// === EXPRESSIONS (WITH PRECEDENCE) ===
 expression
-    : castingExpression
+    : assignmentExpression
     ;
 
-// Precedence level 0: type casting
-
-castingExpression
-    : orExpression (AS typeExpression)?;
-
-// Precedence level 1: logical OR
-orExpression
-    : andExpression (OR andExpression)*
+assignmentExpression
+    : (ID | extractItem) ASSIGN assignmentExpression
+    | castingExpression
     ;
 
-// Precedence Level 2: logical AND
-andExpression
-    : relationalExpression (AND relationalExpression)*
-    ;
+castingExpression:      orExpression (AS typeExpression)?;
+orExpression:           andExpression (OR andExpression)*;
+andExpression:          relationalExpression (AND relationalExpression)*;
+relationalExpression:   additiveExpression ((GT | LT | EQ) additiveExpression)*;
+additiveExpression:     multiplicativeExpression ((PLUS | MINUS) multiplicativeExpression)*;
+multiplicativeExpression: unaryExpression ((MUL | DIV) unaryExpression)*;
 
-// Precedence Level 3: relational operators
-relationalExpression
-    : additiveExpression ((GT | LT | EQ) additiveExpression)*
-    ;
-
-// Precedence Level 4: addition and subtraction
-additiveExpression
-    : multiplicativeExpression ((PLUS | MINUS) multiplicativeExpression)*
-    ;
-
-// Precedence Level 5: multiplication and division
-multiplicativeExpression
-    : unaryExpression ((MUL | DIV) unaryExpression)*
-    ;
-
-// Precedence Level 6: Prefix Unary operators
 unaryExpression
     : NOT unaryExpression
+    | MINUS unaryExpression
     | primaryExpression
     ;
 
-// Precedence Level 7: Primary expressions (highest precedence)
-// These are the "atoms" of the language.
 primaryExpression
     : literal
     | ID
-    | functionCall
     | extractItem
-    | PIPE expression PIPE     // e.g., |x|
-    | LPAREN expression RPAREN // Parentheses to override precedence
+    | PIPE expression PIPE
+    | LPAREN expression RPAREN
     ;
 
-extractItem: ID (LBRACK expression RBRACK)+; // e.g., my_vector[index]
+extractItem: ID (LBRACK expression RBRACK)+;
 
 typeExpression
     : INTEGER_TYPE
@@ -108,13 +88,5 @@ literal
     ;
 
 booleanLiteral: TRUE | FALSE;
-
-vectorLiteral: LBRACK argList? RBRACK;
-
-matrixLiteral: LBRACK vectorLiteral (COMMA vectorLiteral)* RBRACK;
-
-type: INTEGER_TYPE | STRING_TYPE | VECTOR_TYPE | MATRIX_TYPE | BOOLEAN_TYPE;
-
-functionCall: ID LPAREN argList? RPAREN;
-
-argList: expression (COMMA expression)*;
+vectorLiteral:  LBRACK argList? RBRACK;
+matrixLiteral:  LBRACK vectorLiteral (COMMA vectorLiteral)* RBRACK;

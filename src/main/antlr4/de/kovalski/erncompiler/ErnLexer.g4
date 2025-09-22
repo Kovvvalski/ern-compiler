@@ -10,10 +10,15 @@ WHILE: 'while';
 TRUE: 'true';
 FALSE: 'false';
 AS: 'as';
+RETURNS: 'returns';
+EXPECTS: 'expects';
+FOR: 'for';
+DO: 'do';
+
 // === LITERALS ===
 
 // INTEGER
-INTEGER_LITERAL: MINUS? DIGIT+;
+INTEGER_LITERAL: DIGIT+;
 
 // STRING
 STRING_LITERAL: '"' ( ~[\\"\r\n] | '\\' . )* '"';

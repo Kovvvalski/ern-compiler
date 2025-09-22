@@ -1,0 +1,107 @@
+/*
+ * == ERN Language Feature Showcase ==
+ *
+ * This program serves as an advanced example of the ERN language syntax.
+ * It defines several functions for vector and matrix manipulation and then
+ * calls them in a main execution block to demonstrate control flow,
+ * expressions, and assignments.
+ *
+ * Key features demonstrated:
+ * - Function definitions with 'expects' (in) and 'returns' (out) parameters.
+ * - Function calls that pass arguments directly, without keywords.
+ * - All literal types: Integer, String, Boolean, Vector, Matrix.
+ * - Control flow: if-else, for, while, do-while.
+ * - Complex expressions with logical and arithmetic operators.
+ * - The pipe operator |...| for size/absolute value.
+ * - Chained assignments.
+ * - Matrix and vector element access (indexing).
+ * - Type casting with 'as'.
+ */
+
+// === FUNCTION DEFINITIONS ===
+
+// Calculates statistics for a given vector: its sum and product.
+// The function signature defines 'sum' and 'product' as out-parameters.
+function get_vector_stats(returns sum, returns product, expects data_vec) {
+    // Initialize out-parameters. Chained assignment is a valid expression.
+    sum = product = 0;
+    product = 1; // Product must start at 1.
+
+    // Loop through the vector using its size.
+    for (i = 0; i < |data_vec|; i = i + 1) {
+        sum = sum + data_vec[i];
+        product = product * data_vec[i];
+    }
+}
+
+// Transposes a 2x3 matrix into a 3x2 matrix.
+// The signature defines 'transposed_m' as an out-parameter.
+function transpose_matrix(returns transposed_m, expects original_m) {
+    // Note: This function assumes specific dimensions (2x3 -> 3x2) for simplicity.
+    // A real implementation would need to handle dynamic sizes.
+    for (row = 0; row < 2; row = row + 1) {
+        for (col = 0; col < 3; col = col + 1) {
+            // Swap row and column indices for transposition.
+            transposed_m[col][row] = original_m[row][col];
+        }
+    }
+}
+
+
+// === MAIN PROGRAM EXECUTION ===
+
+// --- Variable Initialization ---
+// Demonstrates all literal types.
+main_vector = [10, -5, 8, 2];
+main_matrix = [[10, 20, 30], [40, 50, 60]];
+transposed_result = [[0, 0], [0, 0], [0, 0]]; // Pre-initialize with correct dimensions.
+is_active = true;
+status_message = "System Initialized.";
+loop_counter = 3;
+sum_result = 0;
+product_result = 0;
+
+
+// --- Function Calls & Logic ---
+
+// Call the vector statistics function.
+// The function will modify 'sum_result' and 'product_result' because they
+// correspond to the 'returns' (out) parameters in the function's signature.
+get_vector_stats(sum_result, product_result, main_vector);
+
+// A complex 'if' statement to check the results.
+// Demonstrates: logical operators 'and', 'or', 'not', and relational operators.
+if ((sum_result > 20 and product_result < -100) or not is_active) {
+    status_message = "Vector stats calculated. Values are in the expected range.";
+} else {
+    status_message = "Warning: Vector stats are outside the expected range.";
+}
+
+
+// --- Loops & Further Demonstrations ---
+
+// A 'while' loop.
+while (loop_counter > 0) {
+    // Some dummy operation.
+    loop_counter = loop_counter - 1;
+}
+
+// A 'do-while' loop, which always executes at least once.
+do {
+    is_active = false; // Change the flag to exit the loop.
+} while (is_active);
+
+
+// Call the matrix transposition function. 'transposed_result' will be modified.
+transpose_matrix(transposed_result, main_matrix);
+
+
+// --- Final Syntactic Showcases ---
+
+// Demonstrate the '|' operator for absolute value.
+negative_value = -100;
+abs_value = |negative_value|;
+
+// Demonstrate type casting with 'as'.
+// Although 'abs_value' is already an integer, this shows the syntax.
+casted_value = abs_value as Int;
