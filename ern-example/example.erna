@@ -22,7 +22,7 @@
 
 // Calculates statistics for a given vector: its sum and product.
 // The function signature defines 'sum' and 'product' as out-parameters.
-function get_vector_stats(returns sum, returns product, expects data_vec) {
+function get_vector_stats(returns sum of Int, returns product of String, expects data_vec of Boolean) {
     // Initialize out-parameters. Chained assignment is a valid expression.
     sum = product = 0;
     product = 1; // Product must start at 1.
@@ -36,7 +36,7 @@ function get_vector_stats(returns sum, returns product, expects data_vec) {
 
 // Transposes a 2x3 matrix into a 3x2 matrix.
 // The signature defines 'transposed_m' as an out-parameter.
-function transpose_matrix(returns transposed_m, expects original_m) {
+function transpose_matrix(returns transposed_m of String, expects original_m of Matrix) {
     // Note: This function assumes specific dimensions (2x3 -> 3x2) for simplicity.
     // A real implementation would need to handle dynamic sizes.
     for (row = 0; row < 2; row = row + 1) {

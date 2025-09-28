@@ -14,6 +14,7 @@ RETURNS: 'returns';
 EXPECTS: 'expects';
 FOR: 'for';
 DO: 'do';
+OF: 'of';
 
 // === LITERALS ===
 

@@ -1,7 +1,9 @@
 parser grammar ErnParser;
 
 // === OPTIONS ===
-options { tokenVocab = ErnLexer; }
+options {
+    tokenVocab = ErnLexer;
+    }
 
 // === ENTRY POINT ===
 program: functionDef* statement* EOF;
@@ -20,7 +22,7 @@ statement
 ifStatement:      IF LPAREN expression RPAREN statement (ELSE statement)?;
 whileStatement:   WHILE LPAREN expression RPAREN block;
 doWhileStatement: DO block WHILE LPAREN expression RPAREN SEMI;
-forStatement:     FOR LPAREN expressionList? SEMI expressionList? SEMI expressionList? RPAREN block;
+forStatement:     FOR LPAREN expressionList? SEMI expression? SEMI expressionList? RPAREN block;
 expressionList:   expression (COMMA expression)*;
 
 // === FUNCTIONS ===
@@ -31,7 +33,7 @@ block: LBRACE statement* RBRACE;
 
 paramList: param (COMMA param)*;
 
-param: (RETURNS | EXPECTS) ID;
+param: (RETURNS | EXPECTS) ID OF expressionType;
 
 functionCall: ID LPAREN argList? RPAREN;
 
@@ -47,7 +49,7 @@ assignmentExpression
     | castingExpression
     ;
 
-castingExpression:      orExpression (AS typeExpression)?;
+castingExpression:      orExpression (AS expressionType)?;
 orExpression:           andExpression (OR andExpression)*;
 andExpression:          relationalExpression (AND relationalExpression)*;
 relationalExpression:   additiveExpression ((GT | LT | EQ) additiveExpression)*;
@@ -70,7 +72,7 @@ primaryExpression
 
 extractItem: ID (LBRACK expression RBRACK)+;
 
-typeExpression
+expressionType
     : INTEGER_TYPE
     | STRING_TYPE
     | VECTOR_TYPE
